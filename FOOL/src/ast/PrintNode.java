@@ -13,6 +13,7 @@ public class PrintNode implements Node {
 	}
 
 	public Node typeCheck() {
+		// il tipo del ritorno è esattamente il tipo dell'argomento
 		return exp.typeCheck();
 	}
 

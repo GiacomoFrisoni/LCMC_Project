@@ -63,7 +63,6 @@ declist	returns [ArrayList<Node> astlist]
               LPAR {ArrayList<Node> parTypes = new ArrayList<Node>();
               	    int paroffset=1;
                     }
-                //DA QUI ESERCITAZIONE
                 (fid=ID COLON fty=type
                   { 
                   parTypes.add($fty.ast);
@@ -83,8 +82,7 @@ declist	returns [ArrayList<Node> astlist]
                      System.exit(0);}
                     }
                   )*
-                )? 
-                //FINO A QUI ESERCITAZIONE
+                )?
               RPAR {entry.addType(new ArrowTypeNode(parTypes,$t.ast));}
               (LET d=declist IN {f.addDec($d.astlist);})? e=exp
               {f.addBody($e.ast);

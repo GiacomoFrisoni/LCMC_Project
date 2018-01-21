@@ -20,6 +20,10 @@ public class IfNode implements Node {
 				el.toPrint(s + "  ");
 	}
 
+	/*
+	 * Verifico che le due espressioni th ed el siano una sottotipo dell'altra
+	 * e delle due ritorno il tipo gerarchicamente più grande.
+	 */
 	public Node typeCheck() {
 		if (!(FOOLlib.isSubtype(cond.typeCheck(), new BoolTypeNode()))) {
 			System.out.println("non boolean condition in if");
@@ -39,13 +43,13 @@ public class IfNode implements Node {
 	public String codeGeneration() {
 		String l1 = FOOLlib.freshLabel();
 		String l2 = FOOLlib.freshLabel();
-		return cond.codeGeneration() +
+		return cond.codeGeneration() +		// metto sullo stack il risultato della condizione (1 o 0)
 				"push 1\n" +
-				"beq " + l1 + "\n" +
-				el.codeGeneration() +
+				"beq " + l1 + "\n" +		// se il risultato della condizione è 1 salto a l1
+				el.codeGeneration() +		// calcolo l'else e lascio il risultato sullo stack
 				"b " + l2 + "\n" +
 				l1 + ": \n" +
-				th.codeGeneration() +
+				th.codeGeneration() +		// genero il risultato dello then e lo metto sullo stack
 				l2 + ": \n";
 	}
 

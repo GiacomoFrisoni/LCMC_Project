@@ -16,6 +16,9 @@ public class EqualNode implements Node {
 		return s + "Equal\n" + left.toPrint(s + "  ") + right.toPrint(s + "  ");
 	}
 
+	/*
+	 * Verifico che i nodi siano uno sottotipo dell'altro.
+	 */
 	public Node typeCheck() {
 		Node l = left.typeCheck();
 		Node r = right.typeCheck();
@@ -30,12 +33,10 @@ public class EqualNode implements Node {
 		String l1 = FOOLlib.freshLabel();
 		String l2 = FOOLlib.freshLabel();
 		return left.codeGeneration() +
-				right.codeGeneration() +
-				"beq " + l1 +
-				"\n" +
-				"push 0\n" +
-				"b " + l2 +
-				"\n" +
+				right.codeGeneration() +	// pusha due valori
+				"beq " + l1 + "\n" +		// se sono uguali salta a l1 e fa push 1
+				"push 0\n" +				// altrimenti fa push 0 e salta fuori dal pezzo di codice
+				"b " + l2 + "\n" +
 				l1 + ": \n" +
 				"push 1\n" +
 				l2 + ": \n";

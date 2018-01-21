@@ -10,22 +10,34 @@ public class Test {
 
 		String fileName = "prova.fool";
 
+		// Creazione di uno stream di caratteri
 		CharStream chars = CharStreams.fromFileName(fileName);
+		
+		// Creazione dell'oggetto lexer con origine dal file
 		FOOLLexer lexer = new FOOLLexer(chars);
+		
+		// Creazione di uno stream di token con origine dall'oggetto lexer
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
+		
 		FOOLParser parser = new FOOLParser(tokens);
+		
+		// Generazione AST con Id associate a relative entry symbol table
+		Node ast = parser.prog().ast;
 
-		Node ast = parser.prog().ast; // generazione AST con Id associate a relative entry symbol table
-
+		// Stampa del numero di errori lessicali e sintattici
 		System.out.println("You had: " + lexer.lexicalErrors + " lexical errors and " + parser.getNumberOfSyntaxErrors()
 				+ " syntax errors.");
 
+		// Visualizzazione dell'AST
 		System.out.println("Visualizing AST...");
 		System.out.print(ast.toPrint(""));
 
-		Node type = ast.typeCheck(); // type-checking bottom-up
+		// Type-checking bottom-up
+		Node type = ast.typeCheck(); 
 		System.out.println(type.toPrint("Type checking ok! Type of the program is: "));
 
+		// --------------------------------------------------------------------------------
+		
 		// CODE GENERATION prova.fool.asm
 		String code = ast.codeGeneration();
 		BufferedWriter out = new BufferedWriter(new FileWriter(fileName + ".asm"));

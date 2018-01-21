@@ -5,8 +5,8 @@ import lib.*;
 
 public class ProgLetInNode implements Node {
 
-	private ArrayList<Node> declist;
-	private Node exp;
+	private ArrayList<Node> declist;	// elenco di dichiarazioni
+	private Node exp;					// corpo principale del programma
 
 	public ProgLetInNode(ArrayList<Node> d, Node e) {
 		declist = d;
