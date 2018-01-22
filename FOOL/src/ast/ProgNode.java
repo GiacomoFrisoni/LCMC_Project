@@ -9,7 +9,6 @@ public class ProgNode implements Node {
 	}
 
 	public String toPrint(String s) {
-
 		return s + "Prog\n" + exp.toPrint(s + "  ");
 	}
 

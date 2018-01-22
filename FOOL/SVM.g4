@@ -66,29 +66,29 @@ assembly:
  * LEXER RULES
  *------------------------------------------------------------------*/
 
-PUSH		: 'push' ; 	
-POP	 		: 'pop' ; 	
-ADD	 		: 'add' ;  	
-SUB	 		: 'sub' ;	
-MULT	 	: 'mult' ;  	
-DIV	 		: 'div' ;	
-STOREW	 	: 'sw' ; 	
-LOADW	 	: 'lw' ;	
-BRANCH	 	: 'b' ;	
-BRANCHEQ 	: 'beq' ;	
-BRANCHLESSEQ: 'bleq' ;	
-JS	 		: 'js' ;	
-LOADRA	 	: 'lra' ;	
-STORERA  	: 'sra' ;	 
-LOADRV	 	: 'lrv' ;	
-STORERV  	: 'srv' ;	
-LOADFP	 	: 'lfp' ;	
-STOREFP	 	: 'sfp' ;	
-COPYFP   	: 'cfp' ;      
-LOADHP	 	: 'lhp' ;	
-STOREHP	 	: 'shp' ;	
-PRINT	 	: 'print' ;	
-HALT	 	: 'halt' ;	
+PUSH		: 'push' ;
+POP	 		: 'pop' ;
+ADD	 		: 'add' ;
+SUB	 		: 'sub' ;
+MULT	 	: 'mult' ;
+DIV	 		: 'div' ;
+STOREW	 	: 'sw' ;
+LOADW	 	: 'lw' ;
+BRANCH	 	: 'b' ;
+BRANCHEQ 	: 'beq' ;
+BRANCHLESSEQ: 'bleq' ;
+JS	 		: 'js' ;
+LOADRA	 	: 'lra' ;
+STORERA  	: 'sra' ;
+LOADRV	 	: 'lrv' ;
+STORERV  	: 'srv' ;
+LOADFP	 	: 'lfp' ;
+STOREFP	 	: 'sfp' ;
+COPYFP   	: 'cfp' ;
+LOADHP	 	: 'lhp' ;
+STOREHP	 	: 'shp' ;
+PRINT	 	: 'print' ;
+HALT	 	: 'halt' ;
 
 COL	 		: ':' ;
 LABEL	 	: ('a'..'z'|'A'..'Z')('a'..'z' | 'A'..'Z' | '0'..'9')* ;

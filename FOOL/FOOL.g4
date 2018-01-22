@@ -20,7 +20,7 @@ int lexicalErrors=0;
 /*------------------------------------------------------------------
  * PARSER RULES
  *------------------------------------------------------------------*/
- 
+
 prog returns [Node ast]
 	: {HashMap<String,STentry> hm = new HashMap<String,STentry> ();
        symTable.add(hm);}          
@@ -92,36 +92,46 @@ declist	returns [ArrayList<Node> astlist]
       ) SEMIC
     )+          
 	;
-	
-type	returns [Node ast]
+
+type returns [Node ast]
   : INT  {$ast=new IntTypeNode();}
   | BOOL {$ast=new BoolTypeNode();} 
-	;	
-
-//FINO A QUI
+	;
 
 exp	returns [Node ast]
  	: f=term {$ast= $f.ast;}
  	    (PLUS l=term
- 	     {$ast= new PlusNode ($ast,$l.ast);}
+ 	    	{$ast= new PlusNode($ast,$l.ast);}
+ 	    | MINUS l=term
+ 	    	{$ast= new MinusNode($ast,$l.ast);}
+ 	    | OR l=term
+ 	    	{$ast= new OrNode($ast,$l.ast);}
  	    )*
  	;
- 	
-term	returns [Node ast]
+
+term returns [Node ast]
 	: f=factor {$ast= $f.ast;}
 	    (TIMES l=factor
-	     {$ast= new MultNode ($ast,$l.ast);}
+	    	{$ast= new MultNode($ast,$l.ast);}
+	    | DIV l=factor
+	    	{$ast= new DivNode($ast,$l.ast);}
+	    | AND l=factor
+	    	{$ast= new AndNode($ast,$l.ast);}
 	    )*
 	;
-	
-factor	returns [Node ast]
+
+factor returns [Node ast]
 	: f=value {$ast= $f.ast;}
 	    (EQ l=value 
-	     {$ast= new EqualNode ($ast,$l.ast);}
+	    	{$ast= new EqualNode($ast,$l.ast);}
+	    | GE l=value
+	    	{$ast= new GreaterOrEqualNode($ast,$l.ast);}
+	    | LE l=value
+	    	{$ast= new LessOrEqualNode($ast,$l.ast);}
 	    )*
- 	;	 	
- 
-value	returns [Node ast]
+ 	;
+
+value returns [Node ast]
 	: n=INTEGER   
 	  {$ast= new IntNode(Integer.parseInt($n.text));}  
 	| TRUE 
@@ -132,7 +142,9 @@ value	returns [Node ast]
 	  {$ast= $e.ast;}  
 	| IF x=exp THEN CLPAR y=exp CRPAR 
 		   ELSE CLPAR z=exp CRPAR 
-	  {$ast= new IfNode($x.ast,$y.ast,$z.ast);}	 
+	  {$ast= new IfNode($x.ast,$y.ast,$z.ast);}
+	| NOT LPAR e=exp RPAR
+	  {$ast= new NotNode($e.ast);}
 	| PRINT LPAR e=exp RPAR	
 	  {$ast= new PrintNode($e.ast);}
 	| i=ID 
@@ -153,9 +165,9 @@ value	returns [Node ast]
 	   	 RPAR
 	   	 {$ast= new CallNode($i.text,entry,arglist,nestingLevel);} 
 	   )?
- 	; 
+ 	;
 
-  		
+
 /*------------------------------------------------------------------
  * LEXER RULES
  *------------------------------------------------------------------*/
@@ -166,9 +178,16 @@ ASS	: '=' ;
 //
 SEMIC : ';' ;
 EQ  : '==' ;
+GE	: '>=' ;
+LE	: '<=' ;
+OR	: '||' ;		//Logical OR: does not evaluate additional arguments if the left operand is true
+AND	: '&&' ;		//Logical AND: does not evaluate additional arguments if the left operand is false
+NOT	: '!' ;
 PLUS	: '+' ;
+MINUS	: '-' ;
 TIMES	: '*' ;
-INTEGER : ('-')?(('1'..'9')('0'..'9')*) | '0';
+DIV		: '/' ;
+INTEGER : ('-')?(('1'..'9')('0'..'9')*) | '0' ;
 TRUE	: 'true' ;
 FALSE	: 'false' ;
 LPAR 	: '(' ;
@@ -186,9 +205,9 @@ VAR	: 'var' ;
 FUN	: 'fun' ;
 INT	: 'int' ;
 BOOL	: 'bool' ;
- 
+
 ID 	: ('a'..'z'|'A'..'Z') ('a'..'z'|'A'..'Z'|'0'..'9')* ; //
- 
+
 WHITESP : (' '|'\t'|'\n'|'\r')+ -> channel(HIDDEN) ;
 
 COMMENT : '/*' (.)*? '*/' -> channel(HIDDEN) ;

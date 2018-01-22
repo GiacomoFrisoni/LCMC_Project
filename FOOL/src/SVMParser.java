@@ -89,6 +89,7 @@ public class SVMParser extends Parser {
 	      
 	    int[] code = new int[ExecuteVM.CODESIZE];    
 	    private int i = 0;
+		
 	    private HashMap<String,Integer> labelAdd = new HashMap<String,Integer>();
 	    private HashMap<Integer,String> labelRef = new HashMap<Integer,String>();
 	        
@@ -231,8 +232,8 @@ public class SVMParser extends Parser {
 					match(PUSH);
 					setState(3);
 					((AssemblyContext)_localctx).n = match(NUMBER);
-					code[i++] = PUSH; 
-								                 code[i++] = Integer.parseInt((((AssemblyContext)_localctx).n!=null?((AssemblyContext)_localctx).n.getText():null));
+					 code[i++] = PUSH;
+					      			          code[i++] = Integer.parseInt((((AssemblyContext)_localctx).n!=null?((AssemblyContext)_localctx).n.getText():null)); 
 					}
 					break;
 				case 2:
@@ -241,57 +242,57 @@ public class SVMParser extends Parser {
 					match(PUSH);
 					setState(6);
 					((AssemblyContext)_localctx).l = match(LABEL);
-					code[i++] = PUSH; //
-						    		             labelRef.put(i++,(((AssemblyContext)_localctx).l!=null?((AssemblyContext)_localctx).l.getText():null));
+					 code[i++]=PUSH;
+						  				 	  labelRef.put(i++, (((AssemblyContext)_localctx).l!=null?((AssemblyContext)_localctx).l.getText():null)); 
 					}
 					break;
 				case 3:
 					{
 					setState(8);
 					match(POP);
-					code[i++] = POP;
+					 code[i++] = POP;		
 					}
 					break;
 				case 4:
 					{
 					setState(10);
 					match(ADD);
-					code[i++] = ADD;
+					 code[i++] = ADD;		
 					}
 					break;
 				case 5:
 					{
 					setState(12);
 					match(SUB);
-					code[i++] = SUB;
+					 code[i++] = SUB;		
 					}
 					break;
 				case 6:
 					{
 					setState(14);
 					match(MULT);
-					code[i++] = MULT;
+					 code[i++] = MULT; 	
 					}
 					break;
 				case 7:
 					{
 					setState(16);
 					match(DIV);
-					code[i++] = DIV;
+					 code[i++] = DIV;		
 					}
 					break;
 				case 8:
 					{
 					setState(18);
 					match(STOREW);
-					code[i++] = STOREW;
+					 code[i++] = STOREW;	
 					}
 					break;
 				case 9:
 					{
 					setState(20);
 					match(LOADW);
-					code[i++] = LOADW;
+					 code[i++] = LOADW;	
 					}
 					break;
 				case 10:
@@ -300,7 +301,7 @@ public class SVMParser extends Parser {
 					((AssemblyContext)_localctx).l = match(LABEL);
 					setState(23);
 					match(COL);
-					labelAdd.put((((AssemblyContext)_localctx).l!=null?((AssemblyContext)_localctx).l.getText():null),i);
+					 labelAdd.put((((AssemblyContext)_localctx).l!=null?((AssemblyContext)_localctx).l.getText():null), i); 
 					}
 					break;
 				case 11:
@@ -309,8 +310,8 @@ public class SVMParser extends Parser {
 					match(BRANCH);
 					setState(26);
 					((AssemblyContext)_localctx).l = match(LABEL);
-					code[i++] = BRANCH;
-					                       labelRef.put(i++,(((AssemblyContext)_localctx).l!=null?((AssemblyContext)_localctx).l.getText():null));
+					 code[i++] = BRANCH;
+						  					 		  labelRef.put(i++, (((AssemblyContext)_localctx).l!=null?((AssemblyContext)_localctx).l.getText():null)); 
 					}
 					break;
 				case 12:
@@ -319,8 +320,8 @@ public class SVMParser extends Parser {
 					match(BRANCHEQ);
 					setState(29);
 					((AssemblyContext)_localctx).l = match(LABEL);
-					code[i++] = BRANCHEQ; //
-					                        labelRef.put(i++,(((AssemblyContext)_localctx).l!=null?((AssemblyContext)_localctx).l.getText():null));
+					 code[i++] = BRANCHEQ; 
+						  							  labelRef.put(i++, (((AssemblyContext)_localctx).l!=null?((AssemblyContext)_localctx).l.getText():null)); 
 					}
 					break;
 				case 13:
@@ -329,92 +330,92 @@ public class SVMParser extends Parser {
 					match(BRANCHLESSEQ);
 					setState(32);
 					((AssemblyContext)_localctx).l = match(LABEL);
-					code[i++] = BRANCHLESSEQ;
-					                          labelRef.put(i++,(((AssemblyContext)_localctx).l!=null?((AssemblyContext)_localctx).l.getText():null));
+					 code[i++] = BRANCHLESSEQ;
+						  							  labelRef.put(i++, (((AssemblyContext)_localctx).l!=null?((AssemblyContext)_localctx).l.getText():null)); 
 					}
 					break;
 				case 14:
 					{
 					setState(34);
 					match(JS);
-					code[i++] = JS;
+					 code[i++] = JS;		
 					}
 					break;
 				case 15:
 					{
 					setState(36);
 					match(LOADRA);
-					code[i++] = LOADRA;
+					 code[i++] = LOADRA;	
 					}
 					break;
 				case 16:
 					{
 					setState(38);
 					match(STORERA);
-					code[i++] = STORERA;
+					 code[i++] = STORERA;	
 					}
 					break;
 				case 17:
 					{
 					setState(40);
 					match(LOADRV);
-					code[i++] = LOADRV;
+					 code[i++] = LOADRV;	
 					}
 					break;
 				case 18:
 					{
 					setState(42);
 					match(STORERV);
-					code[i++] = STORERV;
+					 code[i++] = STORERV;	
 					}
 					break;
 				case 19:
 					{
 					setState(44);
 					match(LOADFP);
-					code[i++] = LOADFP;
+					 code[i++] = LOADFP;	
 					}
 					break;
 				case 20:
 					{
 					setState(46);
 					match(STOREFP);
-					code[i++] = STOREFP;
+					 code[i++] = STOREFP;	
 					}
 					break;
 				case 21:
 					{
 					setState(48);
 					match(COPYFP);
-					code[i++] = COPYFP;
+					 code[i++] = COPYFP;	
 					}
 					break;
 				case 22:
 					{
 					setState(50);
 					match(LOADHP);
-					code[i++] = LOADHP;
+					 code[i++] = LOADHP;	
 					}
 					break;
 				case 23:
 					{
 					setState(52);
 					match(STOREHP);
-					code[i++] = STOREHP;
+					 code[i++] = STOREHP;	
 					}
 					break;
 				case 24:
 					{
 					setState(54);
 					match(PRINT);
-					code[i++] = PRINT;
+					 code[i++] = PRINT; 	
 					}
 					break;
 				case 25:
 					{
 					setState(56);
 					match(HALT);
-					code[i++] = HALT;
+					 code[i++] = HALT; 	
 					}
 					break;
 				}
@@ -423,10 +424,10 @@ public class SVMParser extends Parser {
 				_errHandler.sync(this);
 				_la = _input.LA(1);
 			}
-			 for (Integer refAdd: labelRef.keySet()) {
-				              code[refAdd]=labelAdd.get(labelRef.get(refAdd));
-					     } 
-					   
+			 	for (Integer j : labelRef.keySet()) {
+				  			code[j] = labelAdd.get(labelRef.get(j));
+				  		}
+				  	
 			}
 		}
 		catch (RecognitionException re) {
