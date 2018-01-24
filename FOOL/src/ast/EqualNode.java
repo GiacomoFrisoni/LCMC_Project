@@ -18,12 +18,17 @@ public class EqualNode implements Node {
 
 	/*
 	 * Verifico che i nodi siano uno sottotipo dell'altro.
+	 * L'uso di espressioni con tipi funzionali non è consentito.
 	 */
 	public Node typeCheck() {
 		Node l = left.typeCheck();
 		Node r = right.typeCheck();
 		if (!(FOOLlib.isSubtype(l, r) || FOOLlib.isSubtype(r, l))) {
 			System.out.println("Incompatible types in equal");
+			System.exit(0);
+		}
+		if (l instanceof ArrowTypeNode || r instanceof ArrowTypeNode) {
+			System.out.println("The use of expressions with functional types is not allowed");
 			System.exit(0);
 		}
 		return new BoolTypeNode();

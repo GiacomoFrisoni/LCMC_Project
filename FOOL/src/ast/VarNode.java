@@ -2,7 +2,7 @@ package ast;
 
 import lib.FOOLlib;
 
-public class VarNode implements Node {
+public class VarNode implements Node, DecNode {
 
 	private String id;	// nome della variabile
 	private Node type;	// tipo della variabile
@@ -34,7 +34,14 @@ public class VarNode implements Node {
 	}
 
 	public String codeGeneration() {
+		// la code generation dell'espressione effettua una push se di tipo non funzionale,
+		// o due push se di tipo funzionale
 		return exp.codeGeneration();
+	}
+
+	@Override
+	public Node getSymType() {
+		return type;
 	}
 
 }

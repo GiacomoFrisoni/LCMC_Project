@@ -4,13 +4,14 @@ import java.util.ArrayList;
 
 import lib.FOOLlib;
 
-public class FunNode implements Node {
+public class FunNode implements Node, DecNode {
 
 	private String id;											// nome della funzione
 	private Node type;											// tipo del ritorno
 	private ArrayList<Node> parlist = new ArrayList<Node>();	// parametri
 	private ArrayList<Node> declist = new ArrayList<Node>();	// dichiarazioni
 	private Node exp;											// corpo della funzione
+	private ArrowTypeNode symType;								// tipo in symbol table
 
 	public FunNode(String i, Node t) {
 		id = i;
@@ -27,6 +28,10 @@ public class FunNode implements Node {
 
 	public void addPar(Node p) {
 		parlist.add(p);
+	}
+	
+	public void addSymType(ArrowTypeNode s) {
+		symType = s;
 	}
 
 	public String toPrint(String s) {
@@ -69,19 +74,22 @@ public class FunNode implements Node {
 		};
 		/*
 		 * Creo una stringa con tanti pop quante le dichiarazioni.
+		 * Se una dichiarazione ha tipo funzionale, vengono effettuate due pop.
 		 */
 		String popDecl = "";
-		for (@SuppressWarnings("unused") Node dec : declist) {
-			popDecl += "pop\n";
+		for (Node dec : declist) {
+			popDecl += (((DecNode)dec).getSymType() instanceof ArrowTypeNode) ? "pop\npop\n" : "pop\n";
 		};
 		/*
 		 * Creo una stringa con tanti pop quanti i parametri.
+		 * Se un parametro ha tipo funzionale, vengono effettuate due pop.
 		 */
 		String popParl = "";
-		for (@SuppressWarnings("unused") Node par : parlist) {
-			popParl += "pop\n";
+		for (Node par : parlist) {
+			popParl += (((DecNode)par).getSymType() instanceof ArrowTypeNode) ? "pop\npop\n" : "pop\n";
 		};
 		/*
+		 * CODICE DELLA FUNZIONE
 		 * Memorizzo il codice della dichiarazione nella collezione di codice di tutte
 		 * le dichiarazioni di funzioni.
 		 */
@@ -104,9 +112,18 @@ public class FunNode implements Node {
 				"lra\n" + "js\n" 		// salta a $ra
 		);
 		/*
-		 * Eseguo una push dell'indirizzo.
+		 * CODICE RITORNATO DALLA CODE GENERATION
+		 * Pusho una coppia di valori:
+		 * - l'indirizzo dell'AR in cui è dichiarata la funzione;
+		 * - l'indirizzo della funzione.
 		 */
-		return "push " + funl + "\n";
+		return	"lfp\n" +
+		 		"push " + funl + "\n";
+	}
+
+	@Override
+	public Node getSymType() {
+		return symType;
 	}
 
 }

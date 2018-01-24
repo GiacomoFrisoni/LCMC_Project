@@ -17,11 +17,6 @@ public class IdNode implements Node {
 	}
 
 	public Node typeCheck() {
-		// verifico che non si stia usando il nome di una funzione come se fosse una variabile
-		if (entry.getType() instanceof ArrowTypeNode) {
-			System.out.println("Wrong usage of function identifier");
-			System.exit(0);
-		}
 		return entry.getType();
 	}
 
@@ -34,10 +29,18 @@ public class IdNode implements Node {
 			// differenza di nesting level tra dove sono e la dichiarazione di "id"
 			getAR += "lw\n";
 
-		return "push " + entry.getOffset() + "\n" +		// metto l'offset sullo stack
-				"lfp\n" + getAR + 						// risalgo la catena statica e ottengo l'indirizzo dell'AR della variabile
-				"add\n" +
-				"lw\n"; 								// carico sullo stack il valore all'indirizzo ottenuto
+		if (entry.getType() instanceof ArrowTypeNode) {
+			return loadFromOffset(entry.getOffset(), getAR) + loadFromOffset(entry.getOffset()-1, getAR);
+		} else {
+			return loadFromOffset(entry.getOffset(), getAR);
+		}
+	}
+	
+	private String loadFromOffset(int offset, String getAR) {
+		return "push " + offset + "\n" +		// metto l'offset sullo stack
+				"lfp\n" + getAR + 				// risalgo la catena statica e ottengo l'indirizzo dell'AR della variabile/funzione
+				"add\n" +						// sommo l'offset
+				"lw\n"; 						// carico sullo stack il valore all'indirizzo ottenuto
 	}
 
 }
