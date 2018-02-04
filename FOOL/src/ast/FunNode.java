@@ -34,6 +34,11 @@ public class FunNode implements Node, DecNode {
 		symType = s;
 	}
 
+	@Override
+	public Node getSymType() {
+		return symType;
+	}
+	
 	public String toPrint(String s) {
 		String parlstr = "";
 		for (Node par : parlist) {
@@ -44,7 +49,8 @@ public class FunNode implements Node, DecNode {
 			declstr += dec.toPrint(s + "  ");
 		};
 		return s + "Fun:" + id + "\n" +
-			type.toPrint(s + "  ") + parlstr + declstr + exp.toPrint(s + "  ");
+			type.toPrint(s + "  ") + parlstr + declstr + exp.toPrint(s + "  ") +
+			symType.toPrint(s + "  ");
 	}
 
 	public Node typeCheck() {
@@ -119,11 +125,6 @@ public class FunNode implements Node, DecNode {
 		 */
 		return	"lfp\n" +
 		 		"push " + funl + "\n";
-	}
-
-	@Override
-	public Node getSymType() {
-		return symType;
 	}
 
 }

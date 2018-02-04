@@ -16,17 +16,15 @@ public class EqualNode implements Node {
 		return s + "Equal\n" + left.toPrint(s + "  ") + right.toPrint(s + "  ");
 	}
 
-	/*
-	 * Verifico che i nodi siano uno sottotipo dell'altro.
-	 * L'uso di espressioni con tipi funzionali non è consentito.
-	 */
 	public Node typeCheck() {
 		Node l = left.typeCheck();
 		Node r = right.typeCheck();
+		// verifico che i nodi siano uno sottotipo dell'altro
 		if (!(FOOLlib.isSubtype(l, r) || FOOLlib.isSubtype(r, l))) {
 			System.out.println("Incompatible types in equal");
 			System.exit(0);
 		}
+		// l'uso di espressioni con tipi funzionali non è consentito
 		if (l instanceof ArrowTypeNode || r instanceof ArrowTypeNode) {
 			System.out.println("The use of expressions with functional types is not allowed");
 			System.exit(0);
@@ -38,9 +36,9 @@ public class EqualNode implements Node {
 		String l1 = FOOLlib.freshLabel();
 		String l2 = FOOLlib.freshLabel();
 		return left.codeGeneration() +
-				right.codeGeneration() +	// pusha due valori
-				"beq " + l1 + "\n" +		// se sono uguali salta a l1 e fa push 1
-				"push 0\n" +				// altrimenti fa push 0 e salta fuori dal pezzo di codice
+				right.codeGeneration() +	// pusho due valori
+				"beq " + l1 + "\n" +		// se sono uguali salto a l1 e faccio push 1
+				"push 0\n" +				// altrimenti faccio push 0 e salto fuori dal pezzo di codice
 				"b " + l2 + "\n" +
 				l1 + ": \n" +
 				"push 1\n" +

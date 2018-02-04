@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import lib.FOOLlib;
 
 /**
+ * Nodo dell'AST corrispondente alla sintassi:
  * new ID()
  */
 public class NewNode implements Node {
@@ -26,7 +27,8 @@ public class NewNode implements Node {
 		for (Node par : parlist) {
 			parlstr += par.toPrint(s + "  ");
 		};
-		return s + "New:" + id + " at nestinglevel " + nestingLevel + "\n" + entry.toPrint(s + "  ") + parlstr;
+		return s + "New:" + id + " at nestinglevel " + nestingLevel + "\n" +
+			entry.toPrint(s + "  ") + parlstr;
 	}
 
 	public Node typeCheck() {
@@ -68,9 +70,9 @@ public class NewNode implements Node {
 		 */
 		String copyParCode = "";
 		for (int i = 0; i < parlist.size(); i++)
-			copyParCode += 	"lhp\n" +							// carico il contenuto di $hp sullo stack
-							"sw\n" +							// memorizzo il valore del parametro a indirizzo $hp
-							"lhp\n" +							// carico $hp sullo stack
+			copyParCode += 	"lhp\n" +					// carico il contenuto di $hp sullo stack
+							"sw\n" +					// memorizzo il valore del parametro a indirizzo $hp
+							"lhp\n" +					// carico $hp sullo stack
 							"push 1\n" +				// carico il valore 1 sullo stack
 							"add\n" +					// incremento $hp e salvo il risultato sullo stack
 							"shp\n";					// aggiorno il valore di $hp

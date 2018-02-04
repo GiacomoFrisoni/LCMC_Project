@@ -49,11 +49,15 @@ prog returns [Node ast]
 	  (	e=exp
         {$ast = new ProgNode($e.ast);}
       | LET
-      	{ ArrayList<Node> cAndDecList = new ArrayList<Node>(); }
-      	( c=clist (d=declist)?
       	{
-      		cAndDecList.addAll($c.astlist); 
-        	cAndDecList.addAll($d.astlist);
+      		ArrayList<Node> cAndDecList = new ArrayList<Node>();
+      		boolean declistYN = false;
+      	}
+      	( c=clist (d=declist {declistYN = true;})?
+      	{
+      		cAndDecList.addAll($c.astlist);
+      		if (declistYN)
+        		cAndDecList.addAll($d.astlist);
       	}
       	| d=declist
       	{ cAndDecList.addAll($d.astlist); }
@@ -142,7 +146,10 @@ clist returns [ArrayList<Node> astlist]
 				System.out.println("Erroneous redefinition of the field "+$fid.text+" at line "+$fid.line);
 				System.exit(0);
 			}
+			FieldNode f = new FieldNode($fid.text,$fty.ast);
 			if (!vt.containsKey($fid.text)) {													// nuovo campo
+				// setto l'offset nel nodo
+				f.addOffset(fieldOffset);
 				// aggiorno la Virtual Table
 				vt.put($fid.text,new STentry(nestingLevel,$fty.ast,fieldOffset--,false));
 				// aggiorno l'oggetto ClassTypeNode
@@ -150,6 +157,8 @@ clist returns [ArrayList<Node> astlist]
 			} else {																			// overriding
 				STentry tmpEntry = vt.get($fid.text);
 				if (!tmpEntry.isMethod()) {
+					// setto l'offset nel nodo
+					f.addOffset(fieldOffset);
 					// aggiorno la Virtual Table (preservando l'offset)
 					vt.put($fid.text,new STentry(nestingLevel,$fty.ast,tmpEntry.getOffset(),false));
 					// aggiorno l'oggetto ClassTypeNode (con trasformazione offset - posizione array)
@@ -160,7 +169,7 @@ clist returns [ArrayList<Node> astlist]
 				}
 			}
 			// memorizzo il campo in ClassNode
-			c.addField(new FieldNode($fid.text,$fty.ast));
+			c.addField(f);
 		}
 		(COMMA id=ID COLON ty=type
 		{
@@ -168,7 +177,10 @@ clist returns [ArrayList<Node> astlist]
 				System.out.println("Erroneous redefinition of the field "+$id.text+" at line "+$id.line);
 				System.exit(0);
 			}
+			f = new FieldNode($id.text,$ty.ast);
 			if (!vt.containsKey($id.text)) {													// nuovo campo
+				// setto l'offset nel nodo
+				f.addOffset(fieldOffset);
 				// aggiorno la Virtual Table
 				vt.put($id.text,new STentry(nestingLevel,$ty.ast,fieldOffset--,false));
 				// aggiorno l'oggetto ClassTypeNode
@@ -177,6 +189,8 @@ clist returns [ArrayList<Node> astlist]
 				STentry tmpEntry = vt.get($id.text);
 				if (!tmpEntry.isMethod())
 				{
+					// setto l'offset nel nodo
+					f.addOffset(fieldOffset);
 					// aggiorno la Virtual Table (preservando l'offset)
 					vt.put($id.text,new STentry(nestingLevel,$ty.ast,tmpEntry.getOffset(),false));
 					// aggiorno l'oggetto ClassTypeNode (con trasformazione offset - posizione array)
@@ -187,7 +201,7 @@ clist returns [ArrayList<Node> astlist]
 				}				
 			}
 			// memorizzo il campo in ClassNode
-			c.addField(new FieldNode($id.text,$ty.ast));
+			c.addField(f);
 		}
 		)*
 		)?

@@ -16,10 +16,8 @@ public class OrNode implements Node {
 		return s + "Or\n" + left.toPrint(s + "  ") + right.toPrint(s + "  ");
 	}
 
-	/*
-	 * Verifico che le due espressioni siano booleane.
-	 */
 	public Node typeCheck() {
+		// verifico che le due espressioni siano booleane
 		if (!(left.typeCheck() instanceof BoolTypeNode
 				&& right.typeCheck() instanceof BoolTypeNode)) {
 			System.out.println("Not boolean types in or");

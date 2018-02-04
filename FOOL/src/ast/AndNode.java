@@ -16,10 +16,8 @@ public class AndNode implements Node {
 		return s + "And\n" + left.toPrint(s + "  ") + right.toPrint(s + "  ");
 	}
 
-	/*
-	 * Verifico che le due espressioni siano booleane.
-	 */
 	public Node typeCheck() {
+		// verifico che le due espressioni siano booleane
 		if (!(left.typeCheck() instanceof BoolTypeNode
 				&& right.typeCheck() instanceof BoolTypeNode)) {
 			System.out.println("Not boolean types in and");

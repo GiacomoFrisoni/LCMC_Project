@@ -48,6 +48,11 @@ public class MethodNode implements Node, DecNode {
 		return label;
 	}
 
+	@Override
+	public Node getSymType() {
+		return symType;
+	}
+	
 	public String toPrint(String s) {
 		String parlstr = "";
 		for (Node par : parlist) {
@@ -58,7 +63,10 @@ public class MethodNode implements Node, DecNode {
 			declstr += dec.toPrint(s + "  ");
 		};
 		return s + "Method:" + id + "\n" +
-			type.toPrint(s + "  ") + parlstr + declstr + exp.toPrint(s + "  ");
+			s + "  Offset: " + offset + "\n" +
+			s + "  Label: " + label + "\n" +
+			type.toPrint(s + "  ") + parlstr + declstr + exp.toPrint(s + "  ") +
+			symType.toPrint(s + "  ");
 	}
 
 	public Node typeCheck() {
@@ -108,7 +116,7 @@ public class MethodNode implements Node, DecNode {
 		 */
 		FOOLlib.putCode(
 				metl + ":\n" +
-				"cfp\n" + 				// setta $fp allo $sp
+				"cfp\n" + 				// setto $fp allo $sp
 				"lra\n" + 				// inserimento Return Address
 				declCode +				// dichiarazioni locali della funzione
 				// AR completato
@@ -122,7 +130,7 @@ public class MethodNode implements Node, DecNode {
 				popParl +				// una pop per ogni parametro
 				"sfp\n" + 				// ripristino il $fp al valore del CL
 				"lrv\n" + 				// risultato della funzione sullo stack
-				"lra\n" + "js\n" 		// salta a $ra
+				"lra\n" + "js\n" 		// salto a $ra
 		);
 		/*
 		 * Memorizzo l'etichetta generata nel campo label.
@@ -132,11 +140,6 @@ public class MethodNode implements Node, DecNode {
 		 * CODICE RITORNATO DALLA CODE GENERATION
 		 */
 		return	"";
-	}
-
-	@Override
-	public Node getSymType() {
-		return symType;
 	}
 
 }

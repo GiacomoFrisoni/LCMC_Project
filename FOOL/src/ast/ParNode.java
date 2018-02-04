@@ -9,6 +9,11 @@ public class ParNode implements Node, DecNode {
 		id = i;
 		type = t;
 	}
+	
+	@Override
+	public Node getSymType() {
+		return type;
+	}
 
 	public String toPrint(String s) {
 		return s + "Par:" + id + "\n" +
@@ -24,10 +29,5 @@ public class ParNode implements Node, DecNode {
 	public String codeGeneration() {
 		return "";
 	}
-
-	@Override
-	public Node getSymType() {
-		return type;
-	}
-
+	
 }

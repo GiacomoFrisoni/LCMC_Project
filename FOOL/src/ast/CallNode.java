@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import lib.FOOLlib;
 
 /**
+ * Nodo dell'AST corrispondente alla sintassi:
  * ID()
  */
 public class CallNode implements Node {
@@ -26,7 +27,8 @@ public class CallNode implements Node {
 		for (Node par : parlist) {
 			parlstr += par.toPrint(s + "  ");
 		};
-		return s + "Call:" + id + " at nestinglevel " + nestingLevel + "\n" + entry.toPrint(s + "  ") + parlstr;
+		return s + "Call:" + id + " at nestinglevel " + nestingLevel + "\n" +
+			entry.toPrint(s + "  ") + parlstr;
 	}
 
 	public Node typeCheck() {

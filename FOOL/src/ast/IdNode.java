@@ -1,6 +1,7 @@
 package ast;
 
 /**
+ * Nodo dell'AST corrispondente alla sintassi:
  * ID
  */
 public class IdNode implements Node {

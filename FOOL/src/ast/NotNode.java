@@ -15,6 +15,7 @@ public class NotNode implements Node {
 	}
 
 	public Node typeCheck() {
+		// verifico che l'espressione sia di tipo booleano
 		if (!(exp.typeCheck() instanceof BoolTypeNode)) {
 			System.out.println("Not boolean type in not");
 			System.exit(0);

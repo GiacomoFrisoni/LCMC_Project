@@ -225,4 +225,13 @@ let
                                     new List(5,null))))));
   
 in printList(quicksort(l,dec));
+----------------
+let
+
+  class Test (d:int) {
+    fun getData:int() d;
+  }
+  
+in
+	print (if (new Test(1) == new Test(1)) then {1} else {0});
 */

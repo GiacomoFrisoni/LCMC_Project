@@ -21,7 +21,8 @@ public class IfNode implements Node {
 	}
 
 	/*
-	 * Verifico che le due espressioni th ed el abbiano un antenato in comune
+	 * Verifico che la condizione sia di tipo booleano.
+	 * Controllo inoltre che le due espressioni th ed el abbiano un antenato in comune
 	 * e ritorno quello più prossimo.
 	 */
 	public Node typeCheck() {

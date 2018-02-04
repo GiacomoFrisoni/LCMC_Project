@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import lib.FOOLlib;
 
 /**
+ * Nodo dell'AST corrispondente alla sintassi:
  * ID1.ID2()
  */
 public class ClassCallNode implements Node {
@@ -30,8 +31,9 @@ public class ClassCallNode implements Node {
 		for (Node par : parlist) {
 			parlstr += par.toPrint(s + "  ");
 		};
-		return s + "ClassCall: method " + methodId + " of object " + id + " at nestinglevel "
-			+ nestingLevel + "\n" + entry.toPrint(s + "  ") + methodEntry.toPrint(s + "  ") + parlstr;
+		return s + "ClassCall: method " + methodId + " of object " + id + " at nestinglevel " + nestingLevel + "\n" +
+			s + "  Object Reference STentry:\n" + entry.toPrint(s + "    ") +
+			s + "  Method STentry:\n" + methodEntry.toPrint(s + "    ") + parlstr;
 	}
 
 	public Node typeCheck() {

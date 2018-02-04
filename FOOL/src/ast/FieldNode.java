@@ -2,30 +2,15 @@ package ast;
 
 public class FieldNode implements Node, DecNode {
 
-	private String id;
-	private Node type;
-	private int offset;											// offset in symbol table
+	private String id;		// nome del campo
+	private Node type;		// tipo del campo
+	private int offset;		// offset in symbol table
 
 	public FieldNode(String i, Node t) {
 		id = i;
 		type = t;
 	}
-
-	public String toPrint(String s) {
-		return s + "Field:" + id + "\n" +
-				type.toPrint(s + "  ");
-	}
-
-	// non utilizzato
-	public Node typeCheck() {
-		return null;
-	}
-
-	// non utilizzato
-	public String codeGeneration() {
-		return "";
-	}
-
+	
 	@Override
 	public Node getSymType() {
 		return type;
@@ -37,6 +22,22 @@ public class FieldNode implements Node, DecNode {
 	
 	public int getOffset() {
 		return offset;
+	}
+
+	public String toPrint(String s) {
+		return s + "Field:" + id + "\n" +
+				type.toPrint(s + "  ") +
+				s + "  Offset:" + offset + "\n";
+	}
+
+	// non utilizzato
+	public Node typeCheck() {
+		return null;
+	}
+
+	// non utilizzato
+	public String codeGeneration() {
+		return "";
 	}
 
 }

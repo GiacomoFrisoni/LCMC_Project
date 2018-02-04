@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import lib.FOOLlib;
 
 /**
+ * Nodo dell'AST corrispondente alla sintassi:
  * class ID1 [extends ID2]...
  */
 public class ClassNode implements Node, DecNode {
@@ -34,6 +35,11 @@ public class ClassNode implements Node, DecNode {
 	public void setSuperEntry(STentry s) {
 		superEntry = s;
 	}
+	
+	@Override
+	public Node getSymType() {
+		return symType;
+	}
 
 	public String toPrint(String s) {
 		String fieldstr = "";
@@ -45,7 +51,8 @@ public class ClassNode implements Node, DecNode {
 			methodstr += m.toPrint(s + "  ");
 		};
 		return s + "Class:" + id + "\n" +
-			symType.toPrint(s + "  ") + fieldstr + methodstr;
+			symType.toPrint(s + "  ") + fieldstr + methodstr +
+			((superEntry != null) ? (s + "  SuperEntry:\n" + superEntry.toPrint(s + "    ")) : "");
 	}
 
 	public Node typeCheck() {
@@ -147,10 +154,5 @@ public class ClassNode implements Node, DecNode {
 				// creo sullo heap la dispatch table costruita in memoria
 				dispCode;
 	}
-
-	@Override
-	public Node getSymType() {
-		return symType;
-	}
-
+	
 }

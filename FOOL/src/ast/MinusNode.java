@@ -18,6 +18,7 @@ public class MinusNode implements Node {
 	}
 
 	public Node typeCheck() {
+		// verifico che i nodi siano di tipo intero o suo sottotipo
 		if (!(FOOLlib.isSubtype(left.typeCheck(), new IntTypeNode())
 				&& FOOLlib.isSubtype(right.typeCheck(), new IntTypeNode()))) {
 			System.out.println("Non integers in difference");

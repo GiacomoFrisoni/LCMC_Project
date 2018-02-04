@@ -6,7 +6,7 @@ public class ClassTypeNode implements Node, Cloneable {
 
 	/*
 	 * Campi, in ordine di apparizione, tenenti conto:
-	 * - dell'ereditarieta'
+	 * - dell'ereditarietà
 	 * - dell'overriding
 	 */
 	private ArrayList<Node> allFields = new ArrayList<Node>();		// tipi dei campi
@@ -40,8 +40,15 @@ public class ClassTypeNode implements Node, Cloneable {
 	}
 
 	public String toPrint(String s) {
-		//return s + "ClassType\n";
-		return null;
+		String fieldstr = "";
+		for (Node f : allFields) {
+			fieldstr += f.toPrint(s + "  ");
+		};
+		String methodstr = "";
+		for (Node m : allMethods) {
+			methodstr += m.toPrint(s + "  ");
+		};
+		return s + "ClassType:\n" + fieldstr + methodstr;
 	}
 
 	// non utilizzato

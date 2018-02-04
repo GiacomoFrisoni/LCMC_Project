@@ -2,6 +2,14 @@ package ast;
 
 public interface Node {
 
+	/**
+	 * Restituisce una stringa rappresentante il contenuto del nodo
+	 * per la visualizzazione dell'AST.
+	 * 
+	 * @param indent
+	 * 		indentazione laterale a sinistra
+	 * @return rappresentazione del nodo
+	 */
 	String toPrint(String indent);
 
 	/**
@@ -13,6 +21,12 @@ public interface Node {
 	 */
 	Node typeCheck();
 
+	/**
+	 * Restituisce il codice generato per il nodo in esame,
+	 * compiendo eventuali azioni correlate.
+	 * 
+	 * @return codice generato per il nodo
+	 */
 	String codeGeneration();
 
 }

@@ -13,6 +13,11 @@ public class VarNode implements Node, DecNode {
 		type = t;
 		exp = v;
 	}
+	
+	@Override
+	public Node getSymType() {
+		return type;
+	}
 
 	public String toPrint(String s) {
 		return s + "Var:" + id + "\n" +
@@ -20,11 +25,11 @@ public class VarNode implements Node, DecNode {
 				exp.toPrint(s + "  ");
 	}
 
-	/*
-	 * Verifico che il tipo dell'espressione di inizializzazione coincida
-	 * con quello di dichiarazione.
-	 */
 	public Node typeCheck() {
+		/*
+		 * Verifico che il tipo dell'espressione di inizializzazione coincida
+		 * con quello di dichiarazione.
+		 */
 		if (!FOOLlib.isSubtype(exp.typeCheck(), type)) {
 			System.out.println("Incompatible value for variable: " + id);
 			System.exit(0);
@@ -34,14 +39,11 @@ public class VarNode implements Node, DecNode {
 	}
 
 	public String codeGeneration() {
-		// la code generation dell'espressione effettua una push se di tipo non funzionale,
-		// o due push se di tipo funzionale
+		/*
+		 * La code generation dell'espressione effettua una push se di tipo non funzionale,
+		 * o due push se di tipo funzionale.
+		 */
 		return exp.codeGeneration();
 	}
-
-	@Override
-	public Node getSymType() {
-		return type;
-	}
-
+	
 }

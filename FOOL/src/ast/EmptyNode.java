@@ -1,6 +1,7 @@
 package ast;
 
 /**
+ * Nodo dell'AST corrispondente alla sintassi:
  * null
  */
 public class EmptyNode implements Node {
