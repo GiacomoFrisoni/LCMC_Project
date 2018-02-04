@@ -21,23 +21,20 @@ public class IfNode implements Node {
 	}
 
 	/*
-	 * Verifico che le due espressioni th ed el siano una sottotipo dell'altra
-	 * e delle due ritorno il tipo gerarchicamente più grande.
+	 * Verifico che le due espressioni th ed el abbiano un antenato in comune
+	 * e ritorno quello più prossimo.
 	 */
 	public Node typeCheck() {
 		if (!(FOOLlib.isSubtype(cond.typeCheck(), new BoolTypeNode()))) {
-			System.out.println("non boolean condition in if");
+			System.out.println("Non boolean condition in if");
 			System.exit(0);
 		}
-		Node t = th.typeCheck();
-		Node e = el.typeCheck();
-		if (FOOLlib.isSubtype(t, e))
-			return e;
-		if (FOOLlib.isSubtype(e, t))
-			return t;
-		System.out.println("Incompatible types in then-else branches");
-		System.exit(0);
-		return null;
+		Node lca = FOOLlib.lowestCommonAncestor(th.typeCheck(), el.typeCheck());
+		if (lca == null) {
+			System.out.println("Incompatible types in then-else branches");
+			System.exit(0);
+		}
+		return lca;
 	}
 
 	public String codeGeneration() {

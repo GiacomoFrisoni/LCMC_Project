@@ -36,7 +36,7 @@ public class LessOrEqualNode implements Node {
 				"beq " + l1 + "\n" +		// se sono uguali salta a l1 e fa push 1
 				left.codeGeneration() +
 				right.codeGeneration() +
-				"bleq" + l1 + "\n" +		// altrimenti guarda se il primo è minore del secondo
+				"bleq " + l1 + "\n" +		// altrimenti guarda se il primo è minore del secondo
 											// se sì, salta a l1 e fa push 1
 											// se no, pusha 0 ed esce dalla porzione di codice
 				"push 0\n" +

@@ -1,5 +1,8 @@
 package ast;
 
+/**
+ * ID
+ */
 public class IdNode implements Node {
 
 	private String id;
@@ -17,18 +20,33 @@ public class IdNode implements Node {
 	}
 
 	public Node typeCheck() {
+		/*
+		 * Controllo che ID non sia un metodo.
+		 * Infatti, è possibile passare Higher Order funzioni ma non metodi.
+		 */
+		if (entry.isMethod()) {
+			System.out.println("Wrong usage of method identifier");
+			System.exit(0);
+		}
+		// controllo che ID non sia il nome di una classe
+		if (entry.getType() instanceof ClassTypeNode) {
+			System.out.println("Wrong usage of class identifier");
+			System.exit(0);
+		}
 		return entry.getType();
 	}
 
 	public String codeGeneration() {
 		/*
-		 * Recupero l'AR in cui è dichiarata la variable che sto usando.
+		 * Potrebbe trattarsi di una variabile, un campo o un tipo funzionale.
+		 * Recupero l'AR nello stack o l'oggetto nello heap in cui è dichiarato l'ID
+		 * che sto usando.
 		 */
 		String getAR = "";
 		for (int i = 0; i < nestingLevel - entry.getNestinglevel(); i++)
 			// differenza di nesting level tra dove sono e la dichiarazione di "id"
 			getAR += "lw\n";
-
+		
 		if (entry.getType() instanceof ArrowTypeNode) {
 			return loadFromOffset(entry.getOffset(), getAR) + loadFromOffset(entry.getOffset()-1, getAR);
 		} else {
@@ -39,6 +57,7 @@ public class IdNode implements Node {
 	private String loadFromOffset(int offset, String getAR) {
 		return "push " + offset + "\n" +		// metto l'offset sullo stack
 				"lfp\n" + getAR + 				// risalgo la catena statica e ottengo l'indirizzo dell'AR della variabile/funzione
+												// o dell'oggetto
 				"add\n" +						// sommo l'offset
 				"lw\n"; 						// carico sullo stack il valore all'indirizzo ottenuto
 	}

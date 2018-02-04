@@ -37,7 +37,7 @@ public class GreaterOrEqualNode implements Node {
 				"beq " + l1 + "\n" +		// se sono uguali salta a l1 e fa push 1
 				left.codeGeneration() +
 				right.codeGeneration() +
-				"bleq" + l3 + "\n" +		// altrimenti guarda se il primo è minore del secondo
+				"bleq " + l3 + "\n" +		// altrimenti guarda se il primo è minore del secondo
 											// se sì, salta a l3, pusha 0 ed esce dalla porzione di codice
 											// se no, prosegue e fa push 1
 				l1 + ": \n" +	

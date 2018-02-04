@@ -1,14 +1,55 @@
 let
-  fun g:int(x:(int,int)->int)
-    x(5,7);
-  fun f:int(c:int)
-    let
-      fun linsum:int(a:int,b:int)
-        (a+b)*c;
-    in 
-      g(linsum);   
-in
-  print(f(2));
+
+  class List (f:int, r:List) {
+    fun first:int() f;
+    fun rest:List() r; 
+  }
+  
+  fun printList:List (l:List) 
+      let  
+        fun makeList:List (l:List, i:int) new List (i,l);
+      in 
+         if (l == null) 
+           then {null}
+           else {makeList(printList(l.rest()),print(l.first()))};                 
+  
+  fun append:List (l1:List, l2:List)
+      if (l1 == null)
+        then {l2}
+        else {new List(l1.first(), append(l1.rest(),l2))} ;  
+    
+  fun filter:List (l:List, accept:(int)->bool) 
+      if (l == null) 
+        then {null}
+        else {if ( accept(l.first()) )
+                then { new List( l.first(), filter(l.rest(),accept) ) }
+                else { filter(l.rest(),accept) }
+             };
+         
+  fun quicksort:List (l:List, rel:(int,int)->bool)    
+      let
+        var pivot:int = if (l==null) then {0} else {l.first()};       
+        fun beforePivot:bool (x:int) rel(x,pivot);
+        fun afterPivot:bool (x:int) !(rel(x,pivot));
+      in        
+         if (l == null) 
+           then {null}
+           else {append( 
+                   quicksort( filter(l.rest(),beforePivot), rel ),                  
+                   new List(  pivot,  quicksort( filter(l.rest(),afterPivot), rel )  )                       
+                 )};
+                                   
+  fun inc:bool (x:int,y:int) x<=y;
+  fun dec:bool (x:int,y:int) x>=y;
+               
+  var l:List = new List (2, 
+                    new List(1,
+                        new List(4,
+                            new List (3, 
+                                new List(2,
+                                    new List(5,null))))));
+  
+in printList(quicksort(l,dec));
 
 
 /* SERBATOIO ESEMPI
@@ -47,4 +88,141 @@ let
       g(linsum);   
 in
   print(f(2));
+----------------
+let
+
+  class List (f:int, r:List) {
+    fun first:int() f;
+    fun rest:List() r; 
+  }
+  
+  fun printList:List (l:List) 
+      let  
+        fun makeList:List (l:List, i:int) new List (i,l);
+      in 
+         if (l == null) 
+           then {null}
+           else {makeList(printList(l.rest()),print(l.first()))};                 
+  
+  fun append:List (l1:List, l2:List)
+      if (l1 == null)
+        then {l2}
+        else {new List(l1.first(), append(l1.rest(),l2))} ;  
+    
+  /* filtra la lista "l" mantenendo solo gli elementi */
+  /* che sono: <= a "pivot", se "before" è true       */
+  /*            > a "pivot", se "before" è false      */
+  fun filter:List (l:List, pivot:int, before:bool) 
+      let
+        fun accept:bool (cond:bool)
+            if (before) then {cond} else {!(cond)};
+      in        
+        if (l == null) 
+          then {null}
+          else {if ( accept(l.first()<=pivot) )
+                  then { new List( l.first(), filter(l.rest(),pivot,before) ) }
+                  else { filter(l.rest(),pivot,before) }
+               };    
+  
+  fun quicksort:List (l:List)    
+      let
+        var pivot:int = if (l==null) then {0} else {l.first()}; 
+      in          
+        if (l == null) 
+           then {null}
+           else {append( 
+                   quicksort( filter(l.rest(),pivot,true) ),
+                   new List(  pivot,  quicksort( filter(l.rest(),pivot,false) )  )                       
+                 )};
+                                                        
+  var l:List = new List (2, 
+                    new List(1,
+                        new List(4,
+                            new List (3, 
+                                new List(2,
+                                    new List(5,null))))));
+  
+in printList(quicksort(l));
+----------------
+let
+
+  class Account (money:int) {
+    fun getMon:int () money;
+  }
+  
+  class TradingAcc extends Account (invested:int) {
+    fun getInv:int () invested;
+  }
+  
+  class BankLoan (loan: Account) {
+    fun getLoan:Account () loan;
+    fun openLoan:Account (m:TradingAcc) if ((m.getMon()+m.getInv())>=30000) 
+      then {new Account(loan.getMon())} 
+      else {null};
+  } 
+  
+  class MyBankLoan extends BankLoan (loan: TradingAcc) {
+    fun openLoan:TradingAcc (l:Account) if (l.getMon()>=20000) 
+      then {new TradingAcc(loan.getMon(),loan.getInv())} 
+      else {null};
+  } 
+    
+  var bl:BankLoan = new MyBankLoan(new TradingAcc(50000,40000));
+  var myTradingAcc:TradingAcc = new TradingAcc(20000,5000);
+  var myLoan:Account = bl.openLoan(myTradingAcc);
+      
+in print(if (myLoan==null) then {0} else {myLoan.getMon()});  
+----------------
+let
+
+  class List (f:int, r:List) {
+    fun first:int() f;
+    fun rest:List() r; 
+  }
+  
+  fun printList:List (l:List) 
+      let  
+        fun makeList:List (l:List, i:int) new List (i,l);
+      in 
+         if (l == null) 
+           then {null}
+           else {makeList(printList(l.rest()),print(l.first()))};                 
+  
+  fun append:List (l1:List, l2:List)
+      if (l1 == null)
+        then {l2}
+        else {new List(l1.first(), append(l1.rest(),l2))} ;  
+    
+  fun filter:List (l:List, accept:(int)->bool) 
+      if (l == null) 
+        then {null}
+        else {if ( accept(l.first()) )
+                then { new List( l.first(), filter(l.rest(),accept) ) }
+                else { filter(l.rest(),accept) }
+             };
+         
+  fun quicksort:List (l:List, rel:(int,int)->bool)    
+      let
+        var pivot:int = if (l==null) then {0} else {l.first()};       
+        fun beforePivot:bool (x:int) rel(x,pivot);
+        fun afterPivot:bool (x:int) !(rel(x,pivot));
+      in        
+         if (l == null) 
+           then {null}
+           else {append( 
+                   quicksort( filter(l.rest(),beforePivot), rel ),                  
+                   new List(  pivot,  quicksort( filter(l.rest(),afterPivot), rel )  )                       
+                 )};
+                                   
+  fun inc:bool (x:int,y:int) x<=y;
+  fun dec:bool (x:int,y:int) x>=y;
+               
+  var l:List = new List (2, 
+                    new List(1,
+                        new List(4,
+                            new List (3, 
+                                new List(2,
+                                    new List(5,null))))));
+  
+in printList(quicksort(l,dec));
 */

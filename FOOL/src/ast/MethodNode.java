@@ -4,22 +4,24 @@ import java.util.ArrayList;
 
 import lib.FOOLlib;
 
-public class FunNode implements Node, DecNode {
+public class MethodNode implements Node, DecNode {
 
-	private String id;											// nome della funzione
+	private String id;											// nome del metodo
 	private Node type;											// tipo del ritorno
 	private ArrayList<Node> parlist = new ArrayList<Node>();	// parametri
 	private ArrayList<Node> declist = new ArrayList<Node>();	// dichiarazioni
-	private Node exp;											// corpo della funzione
+	private Node exp;											// corpo del metodo
 	private ArrowTypeNode symType;								// tipo in symbol table
+	private int offset;											// offset in symbol table
+	private String label;										// etichetta generata per l'indirizzo del metodo
 
-	public FunNode(String i, Node t) {
+	public MethodNode(String i, Node t) {
 		id = i;
 		type = t;
 	}
 
-	public void addDec(ArrayList<Node> d) {
-		declist = d;
+	public void addDec(Node d) {
+		declist.add(d);
 	}
 
 	public void addBody(Node b) {
@@ -33,6 +35,18 @@ public class FunNode implements Node, DecNode {
 	public void addSymType(ArrowTypeNode s) {
 		symType = s;
 	}
+	
+	public void addOffset(int o) {
+		offset = o;
+	}
+	
+	public int getOffset() {
+		return offset;
+	}
+	
+	public String getLabel() {
+		return label;
+	}
 
 	public String toPrint(String s) {
 		String parlstr = "";
@@ -43,7 +57,7 @@ public class FunNode implements Node, DecNode {
 		for (Node dec : declist) {
 			declstr += dec.toPrint(s + "  ");
 		};
-		return s + "Fun:" + id + "\n" +
+		return s + "Method:" + id + "\n" +
 			type.toPrint(s + "  ") + parlstr + declstr + exp.toPrint(s + "  ");
 	}
 
@@ -51,9 +65,9 @@ public class FunNode implements Node, DecNode {
 		for (Node dec : declist) {
 			dec.typeCheck();
 		};
-		// il tipo del corpo deve essere un sottotipo di quanto dichiarato tornare dalla funzione
+		// il tipo del corpo deve essere un sottotipo di quanto dichiarato tornare dal metodo
 		if (!FOOLlib.isSubtype(exp.typeCheck(), type)) {
-			System.out.println("Invalid return type for function: " + id);
+			System.out.println("Invalid return type for method: " + id);
 			System.exit(0);
 		}
 		// i parametri, a differenza delle variabili, non vengono inizializzati
@@ -62,9 +76,9 @@ public class FunNode implements Node, DecNode {
 
 	public String codeGeneration() {
 		/*
-		 * Genero un'etichetta fresh per la funzione, che serve come indirizzo cui saltare.
+		 * Genero un'etichetta fresh per il metodo, che serve come indirizzo cui saltare.
 		 */
-		String funl = FOOLlib.freshFunLabel();
+		String metl = FOOLlib.freshFunLabel();
 		/*
 		 * Creo il codice delle dichiarazioni ricorsivamente.
 		 */
@@ -74,11 +88,10 @@ public class FunNode implements Node, DecNode {
 		};
 		/*
 		 * Creo una stringa con tanti pop quante le dichiarazioni.
-		 * Se una dichiarazione ha tipo funzionale, vengono effettuate due pop.
 		 */
 		String popDecl = "";
-		for (Node dec : declist) {
-			popDecl += (((DecNode)dec).getSymType() instanceof ArrowTypeNode) ? "pop\npop\n" : "pop\n";
+		for (@SuppressWarnings("unused") Node dec : declist) {
+			popDecl += "pop\n";
 		};
 		/*
 		 * Creo una stringa con tanti pop quanti i parametri.
@@ -89,12 +102,12 @@ public class FunNode implements Node, DecNode {
 			popParl += (((DecNode)par).getSymType() instanceof ArrowTypeNode) ? "pop\npop\n" : "pop\n";
 		};
 		/*
-		 * CODICE DELLA FUNZIONE
+		 * CODICE DEL METODO
 		 * Memorizzo il codice della dichiarazione nella collezione di codice di tutte
-		 * le dichiarazioni di funzioni.
+		 * le dichiarazioni di funzioni/metodi.
 		 */
 		FOOLlib.putCode(
-				funl + ":\n" +
+				metl + ":\n" +
 				"cfp\n" + 				// setta $fp allo $sp
 				"lra\n" + 				// inserimento Return Address
 				declCode +				// dichiarazioni locali della funzione
@@ -112,13 +125,13 @@ public class FunNode implements Node, DecNode {
 				"lra\n" + "js\n" 		// salta a $ra
 		);
 		/*
-		 * CODICE RITORNATO DALLA CODE GENERATION
-		 * Pusho una coppia di valori:
-		 * - l'indirizzo dell'AR in cui è dichiarata la funzione;
-		 * - l'indirizzo della funzione.
+		 * Memorizzo l'etichetta generata nel campo label.
 		 */
-		return	"lfp\n" +
-		 		"push " + funl + "\n";
+		label = metl;
+		/*
+		 * CODICE RITORNATO DALLA CODE GENERATION
+		 */
+		return	"";
 	}
 
 	@Override

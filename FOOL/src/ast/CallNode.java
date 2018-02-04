@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import lib.FOOLlib;
 
+/**
+ * ID()
+ */
 public class CallNode implements Node {
 
 	private String id;											// nome della funzione
@@ -67,35 +70,53 @@ public class CallNode implements Node {
 		String parCode = "";
 		for (int i = parlist.size() - 1; i >= 0; i--)
 			parCode += parlist.get(i).codeGeneration();
-		/*
-		 * Recupero l'AR, risalendo la catena, in cui è dichiarata la funzione che sto usando.
-		 */
-		String getAR = "";
-		for (int i = 0; i < nestingLevel - entry.getNestinglevel(); i++)
-			// differenza di nesting level tra dove sono e la dichiarazione di "id"
-			getAR += "lw\n";
+		
+		if (entry.isMethod()) {
+			/*
+			 * Recupero l'AR, risalendo la catena, in cui è dichiarato il metodo che sto usando.
+			 * Calcolo dunque la differenza di nesting level tra dove sono e la dichiarazione di "id".
+			 * Inoltre, aggiungo 1 alla differenza di nesting level in modo che, risalendo la
+			 * catena statica, si raggiunga la dispatch table (e non ci si fermi all'object pointer).
+			 */
+			String getAR = "";
+			for (int i = 0; i < ((nestingLevel - entry.getNestinglevel())+1); i++)
+				getAR += "lw\n";
 
-		return  // alloco la mia parte dell'AR della funzione che sto chiamando
-				"lfp\n" + 									// metto il CL sullo stack
-				parCode + 									// alloco i valori dei parametri
-				// codice per recuperare l'inidirizzo a cui saltare (stesso delle variabili)
-				// setto l'AL
-				//NON LO DEVO SETTARE ALL'AMBIENTE IN CUI E' CONTENUTO ID (CHE POTREBBE ESSERE X)
-				//MA ALL'AMBIENTE DELLA FUNZIONE CHE E' CONTENUTA DENTRO
-				//DOVE LO TROVO?
-				//DENTRO ID - COME VALORE - HO L'AR DA USARE PER SETTARE L'AL
-				//FACCIO LA SOLITA COSA
-				//RISALGO LA CATENA STATICA PER TROVARE IL VALORE DI ID (CHE ADESSO SONO DUE)
-				//IL PRIMO LO USO PER SETTARE L'AL
-				"push " + entry.getOffset() + "\n" + 		// metto "offset ID" sullo stack
-				"lfp\n" + getAR + 							// risalgo la catena statica e ottengo l'indirizzo dell'AR di dichiarazione di ID
-				"add\n" + "lw\n" + 							// sommo l'offset e carico sullo stack l'indirizzo dell'AR di dichiarazione della funzione
-				// predispongo il salto
-				"push " + (entry.getOffset()-1) + "\n" + 	// metto "offset ID - 1" sullo stack
-				"lfp\n" + getAR + 							// risalgo la catena statica e ottengo l'indirizzo dell'AR di dichiarazione di ID
-				"add\n" + "lw\n" + 							// sommo l'offset e carico sullo stack l'indirizzo della funzione cui saltare
-				// effettuo il salto
-				"js\n";
+			return	// alloco la mia parte dell'AR del metodo che sto chiamando
+					"lfp\n" +								// CL
+					parCode +								// alloco i valori parametri
+					"lfp\n" + getAR +						// AL
+					// codice per recuperare l'indirizzo a cui saltare (stesso delle variabili)
+					"push " + entry.getOffset() + "\n" + 	// metto l'offset sullo stack
+					"lfp\n" + getAR +						// risalgo la catena statica e ottengo l'indirizzo dell'AR della variabile
+					"add\n" +
+					"lw\n" +								// carico sullo stack l'indirizzo a cui saltare
+					// effettuo il salto
+					"js\n";
+		} else {
+			/*
+			 * Recupero l'AR, risalendo la catena, in cui è dichiarata la funzione che sto usando.
+			 * Calcolo dunque la differenza di nesting level tra dove sono e la dichiarazione di "id".
+			 */
+			String getAR = "";
+			for (int i = 0; i < nestingLevel - entry.getNestinglevel(); i++)
+				getAR += "lw\n";
+			
+			return  // alloco la mia parte dell'AR della funzione che sto chiamando
+					"lfp\n" + 									// metto il CL sullo stack
+					parCode + 									// alloco i valori dei parametri
+					// codice per recuperare l'indirizzo a cui saltare (stesso delle variabili)
+					// setto l'AL
+					"push " + entry.getOffset() + "\n" + 		// metto "offset ID" sullo stack
+					"lfp\n" + getAR + 							// risalgo la catena statica e ottengo l'indirizzo dell'AR di dichiarazione di ID
+					"add\n" + "lw\n" + 							// sommo l'offset e carico sullo stack l'indirizzo dell'AR di dichiarazione della funzione
+					// predispongo il salto
+					"push " + (entry.getOffset()-1) + "\n" + 	// metto "offset ID - 1" sullo stack
+					"lfp\n" + getAR + 							// risalgo la catena statica e ottengo l'indirizzo dell'AR di dichiarazione di ID
+					"add\n" + "lw\n" + 							// sommo l'offset e carico sullo stack l'indirizzo della funzione cui saltare
+					// effettuo il salto
+					"js\n";
+		}
 	}
 
 }

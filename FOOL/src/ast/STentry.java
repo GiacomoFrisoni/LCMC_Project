@@ -5,16 +5,19 @@ public class STentry {
 	private int nl;
 	private Node type;
 	private int offset;
+	private boolean methodYN;
 
-	public STentry(int n, int os) {
+	public STentry(int n, int os, boolean m) {
 		nl = n;
 		offset = os;
+		methodYN = m;
 	}
 
-	public STentry(int n, Node t, int os) {
+	public STentry(int n, Node t, int os, boolean m) {
 		nl = n;
 		type = t;
 		offset = os;
+		methodYN = m;
 	}
 
 	public void addType(Node t) {
@@ -31,6 +34,10 @@ public class STentry {
 
 	public int getNestinglevel() {
 		return nl;
+	}
+	
+	public boolean isMethod() {
+		return methodYN;
 	}
 
 	public String toPrint(String s) {
