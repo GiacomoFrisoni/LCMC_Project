@@ -102,7 +102,7 @@ public class FOOLParser extends Parser {
 	private int nestingLevel = 0;
 	/*
 	 * Dichiarazione della symbol table.
-	 * - il livello ambiente con dichiarazioni piu' esterno � 0 (prima posizione ArrayList) invece che 1 (slides);
+	 * - il livello ambiente con dichiarazioni pi� esterno � 0 (prima posizione ArrayList) invece che 1 (slides);
 	 * - il "fronte" della lista di tabelle � symTable.get(nestingLevel).
 	 */
 	private ArrayList<HashMap<String,STentry>> symTable = new ArrayList<HashMap<String,STentry>>();
@@ -386,7 +386,7 @@ public class FOOLParser extends Parser {
 							ClassNode c = new ClassNode((((ClistContext)_localctx).i!=null?((ClistContext)_localctx).i.getText():null));
 							_localctx.astlist.add(c);
 							/*
-							 * Struttura dati usata per la rilevazione di ridefinzioni (erronee) di campi e metodi
+							 * Struttura dati usata per la rilevazione di ridefinizioni (erronee) di campi e metodi
 							 * con stesso nome all'interno della stessa classe.
 							 */
 							HashSet<String> localDec = new HashSet<String>();
@@ -948,7 +948,7 @@ public class FOOLParser extends Parser {
 										ParNode fpar = new ParNode((((DeclistContext)_localctx).fid!=null?((DeclistContext)_localctx).fid.getText():null),((DeclistContext)_localctx).fty.ast);											// creo nodo ParNode
 										f.addPar(fpar);																			// lo collego al FunNode con addPar
 						                parOffset = (((DeclistContext)_localctx).fty.ast instanceof ArrowTypeNode) ? (parOffset + 2) : (parOffset + 1);
-										if (hmn.put((((DeclistContext)_localctx).fid!=null?((DeclistContext)_localctx).fid.getText():null),new STentry(nestingLevel,((DeclistContext)_localctx).fty.ast,parOffset,false)) != null)		// aggiungo dich a hmn
+										if (hmn.put((((DeclistContext)_localctx).fid!=null?((DeclistContext)_localctx).fid.getText():null),new STentry(nestingLevel,((DeclistContext)_localctx).fty.ast,parOffset,false)) != null)		// aggiungo la dichiarazione a hmn
 										{
 											System.out.println("Parameter id "+(((DeclistContext)_localctx).fid!=null?((DeclistContext)_localctx).fid.getText():null)+" at line "+(((DeclistContext)_localctx).fid!=null?((DeclistContext)_localctx).fid.getLine():0)+" already declared");
 											System.exit(0);

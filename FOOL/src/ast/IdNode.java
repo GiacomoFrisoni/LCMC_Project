@@ -49,6 +49,13 @@ public class IdNode implements Node {
 			getAR += "lw\n";
 		
 		if (entry.getType() instanceof ArrowTypeNode) {
+			/*
+			 * Se ID è di tipo funzionale, due cose vengono messe nello stack
+			 * (recuperandole come valori dall'AR dove è dichiarato ID e con usuale meccanismo di risalita
+			 * della catena statica):
+			 * - l'indirizzo all'AR di dichiarazione della funzione (recuperato a offset ID);
+			 * - l'indirizzo della funzione (recuperato a offset ID - 1).
+			 */
 			return loadFromOffset(entry.getOffset(), getAR) + loadFromOffset(entry.getOffset()-1, getAR);
 		} else {
 			return loadFromOffset(entry.getOffset(), getAR);

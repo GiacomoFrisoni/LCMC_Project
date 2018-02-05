@@ -85,9 +85,9 @@ public class CallNode implements Node {
 				getAR += "lw\n";
 
 			return	// alloco la mia parte dell'AR del metodo che sto chiamando
-					"lfp\n" +								// CL
-					parCode +								// alloco i valori parametri
-					"lfp\n" + getAR +						// AL
+					"lfp\n" +								// metto il CL sullo stack
+					parCode +								// alloco i valori dei parametri
+					"lfp\n" + getAR +						// setto l'AL
 					// codice per recuperare l'indirizzo a cui saltare (stesso delle variabili)
 					"push " + entry.getOffset() + "\n" + 	// metto l'offset sullo stack
 					"lfp\n" + getAR +						// risalgo la catena statica e ottengo l'indirizzo dell'AR della variabile

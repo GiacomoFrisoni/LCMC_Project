@@ -19,14 +19,19 @@ public class EqualNode implements Node {
 	public Node typeCheck() {
 		Node l = left.typeCheck();
 		Node r = right.typeCheck();
+		/*
+		 * L'uso di espressioni con tipi funzionali non è consentito
+		 * (dovrei infatti controllare coppie di valori <indirizzo, riferimento all'AR della dichiarazione>).
+		 * È invece possibile, ad esempio, confrontare variabili riferimento nell'OO:
+		 * queste infatti non presentano coppie di valori, ma contengono soltanto l'indirizzo dell'oggetto.
+		 */
+		if (l instanceof ArrowTypeNode || r instanceof ArrowTypeNode) {
+			System.out.println("The use of expressions with functional types is not allowed");
+			System.exit(0);
+		}
 		// verifico che i nodi siano uno sottotipo dell'altro
 		if (!(FOOLlib.isSubtype(l, r) || FOOLlib.isSubtype(r, l))) {
 			System.out.println("Incompatible types in equal");
-			System.exit(0);
-		}
-		// l'uso di espressioni con tipi funzionali non è consentito
-		if (l instanceof ArrowTypeNode || r instanceof ArrowTypeNode) {
-			System.out.println("The use of expressions with functional types is not allowed");
 			System.exit(0);
 		}
 		return new BoolTypeNode();

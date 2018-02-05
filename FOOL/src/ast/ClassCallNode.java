@@ -50,7 +50,7 @@ public class ClassCallNode implements Node {
 		}
 		/*
 		 * Verifico che il numero di parametri specificati al momento della dichiarazione (ArrowTypeNode)
-		 * coincida effettivamente con quelli indicati nella chiamata (CallNode).
+		 * coincida effettivamente con quelli indicati nella chiamata.
 		 */
 		ArrayList<Node> p = t.getParList();
 		if (!(p.size() == parlist.size())) {
