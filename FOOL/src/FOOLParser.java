@@ -477,7 +477,7 @@ public class FOOLParser extends Parser {
 									STentry tmpEntry = vt.get((((ClistContext)_localctx).fid!=null?((ClistContext)_localctx).fid.getText():null));
 									if (!tmpEntry.isMethod()) {
 										// setto l'offset nel nodo
-										f.addOffset(fieldOffset);
+										f.addOffset(tmpEntry.getOffset());
 										// aggiorno la Virtual Table (preservando l'offset)
 										vt.put((((ClistContext)_localctx).fid!=null?((ClistContext)_localctx).fid.getText():null),new STentry(nestingLevel,((ClistContext)_localctx).fty.ast,tmpEntry.getOffset(),false));
 										// aggiorno l'oggetto ClassTypeNode (con trasformazione offset - posizione array)
@@ -522,7 +522,7 @@ public class FOOLParser extends Parser {
 										if (!tmpEntry.isMethod())
 										{
 											// setto l'offset nel nodo
-											f.addOffset(fieldOffset);
+											f.addOffset(tmpEntry.getOffset());
 											// aggiorno la Virtual Table (preservando l'offset)
 											vt.put((((ClistContext)_localctx).id!=null?((ClistContext)_localctx).id.getText():null),new STentry(nestingLevel,((ClistContext)_localctx).ty.ast,tmpEntry.getOffset(),false));
 											// aggiorno l'oggetto ClassTypeNode (con trasformazione offset - posizione array)

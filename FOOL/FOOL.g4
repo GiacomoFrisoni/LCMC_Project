@@ -158,7 +158,7 @@ clist returns [ArrayList<Node> astlist]
 				STentry tmpEntry = vt.get($fid.text);
 				if (!tmpEntry.isMethod()) {
 					// setto l'offset nel nodo
-					f.addOffset(fieldOffset);
+					f.addOffset(tmpEntry.getOffset());
 					// aggiorno la Virtual Table (preservando l'offset)
 					vt.put($fid.text,new STentry(nestingLevel,$fty.ast,tmpEntry.getOffset(),false));
 					// aggiorno l'oggetto ClassTypeNode (con trasformazione offset - posizione array)
@@ -190,7 +190,7 @@ clist returns [ArrayList<Node> astlist]
 				if (!tmpEntry.isMethod())
 				{
 					// setto l'offset nel nodo
-					f.addOffset(fieldOffset);
+					f.addOffset(tmpEntry.getOffset());
 					// aggiorno la Virtual Table (preservando l'offset)
 					vt.put($id.text,new STentry(nestingLevel,$ty.ast,tmpEntry.getOffset(),false));
 					// aggiorno l'oggetto ClassTypeNode (con trasformazione offset - posizione array)
